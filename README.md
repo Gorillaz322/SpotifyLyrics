@@ -2,8 +2,7 @@
 ## About
 
 Simple python script for getting lyric for current Spotify song.<br />
-Lyric will be saved as a text file to **lyrics** folder in script directory.<br />
-Lyric is displayed by **vim** text editor.
+Lyric will be saved as a text file to ```/lyrics``` folder in script directory and displayed by **vim** text editor.
 
 For convenience, you can make shortcut.
 
