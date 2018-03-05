@@ -21,9 +21,11 @@ class Lyric(object):
     def __init__(self, artist, title):
         self.artist = artist
         self.title = title
-        self.filename = "{artist}-{song}.txt"\
+        self.filename = os.path.join(
+            base_path,
+            "{artist}-{song}.txt"
             .format(artist="_".join(self.artist.split()),
-                    song="_".join(self.title.split()))
+                    song="_".join(self.title.split())))
 
     @staticmethod
     def _urlify_artist(artist):
@@ -50,8 +52,8 @@ class Lyric(object):
 
     def get(self):
         # if lyric was already saved to file - getting from it
-        if os.path.isfile(base_path + self.filename):
-            with open(base_path + self.filename, 'r') as lyrics:
+        if os.path.isfile(self.filename):
+            with open(self.filename, 'r') as lyrics:
                 lyric = lyrics.read()
         else:
             response = json.load(urllib2.urlopen(
@@ -65,7 +67,7 @@ class Lyric(object):
 
             lyric = response['lyric']
 
-            f = open(base_path + self.filename, 'w')
+            f = open(self.filename, 'w')
             f.write(lyric)
 
         return lyric
@@ -86,7 +88,7 @@ class Lyric(object):
                 '--geometry',
                 '{x}x{y}+4096+0'.format(x=str(x_size), y=str(y_size)),
                 '-e',
-                'vim "{file}"'.format(file=base_path + self.filename)
+                'vim "{file}"'.format(file=self.filename)
             ]
         )
 
@@ -101,7 +103,7 @@ except NoDataFoundException:
         "notify-send",
         "-i",
         "dialog-error",
-        "Cannot find lyric for ",
+        "Cannot find lyric for",
         "{} - {}".format(artist, title)
     ])
 
